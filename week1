@@ -1,0 +1,28 @@
+Here is a Python script that creates the requested variables, uses `print()` statements to output formatted text, and includes comments explaining the code.
+
+```python
+# Program to introduce myself and display my learning goal for the course
+
+# Declare personal variables
+name = "Alex"
+age = 24
+favourite_language = "Python"
+goal = "build dynamic web applications and automate routine tasks"
+
+# Print a multi-line introduction using the variables
+print(f"Hello! My name is {name}.")
+print(f"I am {age} years old and love solving problems with code.")
+print(f"My favourite programming language to work with is {favourite_language}.")
+print(f"By the end of this course, my goal is to {goal}.")
+
+```
+
+### Program Output
+
+```text
+Hello! My name is Alex.
+I am 24 years old and love solving problems with code.
+My favourite programming language to work with is Python.
+By the end of this course, my goal is to build dynamic web applications and automate routine tasks.
+
+```
