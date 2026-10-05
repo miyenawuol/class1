@@ -1,22 +1,18 @@
-Here is a complete SQL script for a **Hospital Management System** database. You can save this code directly into a file named `answer.sql` in your GitHub repository.
-
----
-
-### `answer.sql`
+# Corrected Hospital Management System Database Assignment
 
 ```sql
--- Create and switch to the new database
+-- Create database
 CREATE DATABASE IF NOT EXISTS hospital_management;
 USE hospital_management;
 
--- 1. Departments Table
+-- 1. Departments table
 CREATE TABLE departments (
     department_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE,
     location VARCHAR(100) NOT NULL
 );
 
--- 2. Doctors Table
+-- 2. Doctors table
 CREATE TABLE doctors (
     doctor_id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
@@ -25,10 +21,14 @@ CREATE TABLE doctors (
     phone VARCHAR(20) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
     department_id INT NOT NULL,
-    FOREIGN KEY (department_id) REFERENCES departments(department_id) ON DELETE CASCADE
+    CONSTRAINT fk_doctors_department
+        FOREIGN KEY (department_id)
+        REFERENCES departments(department_id)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT
 );
 
--- 3. Patients Table
+-- 3. Patients table
 CREATE TABLE patients (
     patient_id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE patients (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 4. Appointments Table
+-- 4. Appointments table
 CREATE TABLE appointments (
     appointment_id INT AUTO_INCREMENT PRIMARY KEY,
     patient_id INT NOT NULL,
@@ -48,11 +48,19 @@ CREATE TABLE appointments (
     appointment_date DATETIME NOT NULL,
     status ENUM('Scheduled', 'Completed', 'Cancelled') DEFAULT 'Scheduled',
     reason TEXT,
-    FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE,
-    FOREIGN KEY (doctor_id) REFERENCES doctors(doctor_id) ON DELETE CASCADE
+    CONSTRAINT fk_appointments_patient
+        FOREIGN KEY (patient_id)
+        REFERENCES patients(patient_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_appointments_doctor
+        FOREIGN KEY (doctor_id)
+        REFERENCES doctors(doctor_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );
 
--- 5. Medical Records Table
+-- 5. Medical records table
 CREATE TABLE medical_records (
     record_id INT AUTO_INCREMENT PRIMARY KEY,
     patient_id INT NOT NULL,
@@ -60,12 +68,19 @@ CREATE TABLE medical_records (
     diagnosis TEXT NOT NULL,
     treatment_plan TEXT,
     prescribed_date DATE NOT NULL,
-    FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE,
-    FOREIGN KEY (doctor_id) REFERENCES doctors(doctor_id) ON DELETE CASCADE
+    CONSTRAINT fk_medical_records_patient
+        FOREIGN KEY (patient_id)
+        REFERENCES patients(patient_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_medical_records_doctor
+        FOREIGN KEY (doctor_id)
+        REFERENCES doctors(doctor_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );
 
--- Sample Data Insertion
-
+-- Sample data
 INSERT INTO departments (name, location) VALUES
 ('Cardiology', 'Building A, Floor 2'),
 ('Pediatrics', 'Building B, Floor 1'),
@@ -85,36 +100,12 @@ INSERT INTO appointments (patient_id, doctor_id, appointment_date, status, reaso
 (2, 2, '2026-10-11 10:30:00', 'Scheduled', 'Routine checkup for child');
 
 INSERT INTO medical_records (patient_id, doctor_id, diagnosis, treatment_plan, prescribed_date) VALUES
-(1, 1, 'Mild Hypertension', 'Low sodium diet and exercise', '2026-10-01');
-
+(1, 1, 'Mild Hypertension', 'Low sodium diet and exercise', '2026-10-01'),
+(2, 2, 'Routine Pediatric Checkup', 'Continue healthy diet and regular follow-up', '2026-10-02');
 ```
 
----
-
-### Steps to Commit to GitHub
-
-1. Create a local directory and move into it:
-```bash
-mkdir week-1-database-assignment
-cd week-1-database-assignment
-
-```
-
-
-2. Save the SQL code above into a file named `answer.sql`.
-3. Initialize git and commit your work:
-```bash
-git init
-git add answer.sql
-git commit -m "Add week 1 database assignment script"
-
-```
-
-
-4. Link to your new repository on GitHub and push:
-```bash
-git remote add origin https://github.com/<your-username>/week-1-database-assignment.git
-git branch -M main
-git push -u origin main
-
-```
+## Notes
+- The SQL script is valid for MySQL.
+- Foreign keys are named clearly and use proper cascade rules.
+- Sample records were corrected to match the table structure.
+- The script can be saved as `answer.sql` and run in MySQL Workbench or phpMyAdmin.
